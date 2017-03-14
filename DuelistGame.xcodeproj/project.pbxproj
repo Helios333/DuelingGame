@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D140CDFB1E6A1EBD006B2D60 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D140CDFA1E6A1EBD006B2D60 /* MainMenuScene.swift */; };
 		D168859E1E64DE1200C99F97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D168859D1E64DE1200C99F97 /* AppDelegate.swift */; };
 		D16885A01E64DE1200C99F97 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D168859F1E64DE1200C99F97 /* GameScene.sks */; };
 		D16885A21E64DE1200C99F97 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = D16885A11E64DE1200C99F97 /* Actions.sks */; };
@@ -17,6 +18,8 @@
 		D16885AE1E64DE1200C99F97 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D16885AC1E64DE1200C99F97 /* LaunchScreen.storyboard */; };
 		D16885B91E64DE1200C99F97 /* DuelistGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16885B81E64DE1200C99F97 /* DuelistGameTests.swift */; };
 		D16885C41E64DE1200C99F97 /* DuelistGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16885C31E64DE1200C99F97 /* DuelistGameUITests.swift */; };
+		D1A7959E1E68B9EB002BE71C /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A7959D1E68B9EB002BE71C /* GameOverScene.swift */; };
+		D1A795A01E68BD61002BE71C /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A7959F1E68BD61002BE71C /* MyUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D140CDFA1E6A1EBD006B2D60 /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		D168859A1E64DE1200C99F97 /* DuelistGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DuelistGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D168859D1E64DE1200C99F97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D168859F1E64DE1200C99F97 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -53,6 +57,8 @@
 		D16885BF1E64DE1200C99F97 /* DuelistGameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DuelistGameUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D16885C31E64DE1200C99F97 /* DuelistGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuelistGameUITests.swift; sourceTree = "<group>"; };
 		D16885C51E64DE1200C99F97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D1A7959D1E68B9EB002BE71C /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
+		D1A7959F1E68BD61002BE71C /* MyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +113,10 @@
 				D168859F1E64DE1200C99F97 /* GameScene.sks */,
 				D16885A11E64DE1200C99F97 /* Actions.sks */,
 				D16885A31E64DE1200C99F97 /* GameScene.swift */,
+				D1A7959F1E68BD61002BE71C /* MyUtils.swift */,
+				D1A7959D1E68B9EB002BE71C /* GameOverScene.swift */,
 				D16885A51E64DE1200C99F97 /* GameViewController.swift */,
+				D140CDFA1E6A1EBD006B2D60 /* MainMenuScene.swift */,
 				D16885A71E64DE1200C99F97 /* Main.storyboard */,
 				D16885AA1E64DE1200C99F97 /* Assets.xcassets */,
 				D16885AC1E64DE1200C99F97 /* LaunchScreen.storyboard */,
@@ -271,7 +280,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D16885A41E64DE1200C99F97 /* GameScene.swift in Sources */,
+				D140CDFB1E6A1EBD006B2D60 /* MainMenuScene.swift in Sources */,
+				D1A795A01E68BD61002BE71C /* MyUtils.swift in Sources */,
 				D16885A61E64DE1200C99F97 /* GameViewController.swift in Sources */,
+				D1A7959E1E68B9EB002BE71C /* GameOverScene.swift in Sources */,
 				D168859E1E64DE1200C99F97 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -517,6 +529,7 @@
 				D16885CA1E64DE1200C99F97 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D16885CB1E64DE1200C99F97 /* Build configuration list for PBXNativeTarget "DuelistGameTests" */ = {
 			isa = XCConfigurationList;
@@ -525,6 +538,7 @@
 				D16885CD1E64DE1200C99F97 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D16885CE1E64DE1200C99F97 /* Build configuration list for PBXNativeTarget "DuelistGameUITests" */ = {
 			isa = XCConfigurationList;
@@ -533,6 +547,7 @@
 				D16885D01E64DE1200C99F97 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
