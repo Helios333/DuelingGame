@@ -13,8 +13,9 @@ class GameScene: SKScene {
     var lastUpdateTime: TimeInterval = 0
     var dt: TimeInterval = 0
     var invincible: Bool = false
-    var player = SKSpriteNode(imageNamed: "zombie1")
+    var player = SKSpriteNode(imageNamed: "PlayerSpriteBase")
     let playableRect: CGRect
+    let playerAnimation: SKAction
     let cameraMovePointsPerSec: CGFloat = 200.0
     let cameraNode = SKCameraNode()
     var lives = 5
@@ -28,6 +29,15 @@ class GameScene: SKScene {
         let playableMargin = (size.height-playableHeight)/2.0
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)
         var textures:[SKTexture] = []
+        
+        for i in 1...3 {
+            textures.append(SKTexture(imageNamed: "PlayerSpriteBase\(i)"))
+        }
+        
+        textures.append(textures[2])
+        textures.append(textures[1])
+        
+        playerAnimation = SKAction.animate(with: textures, timePerFrame: 0.3)
         
         super.init(size: size)
     }
@@ -46,7 +56,8 @@ class GameScene: SKScene {
         velocity.x = cameraMovePointsPerSec
         move(sprite: player, velocity: velocity)
 
-        
+        player.texture?.filteringMode = SKTextureFilteringMode.nearest
+        player.setScale(10)
         
         lastUpdateTime = currentTime
         moveCamera()
@@ -68,10 +79,13 @@ class GameScene: SKScene {
     
     
     func move(sprite: SKSpriteNode, velocity: CGPoint) {
-        //velocity.x = cameraMovePointsPerSec
-        let amountToMove = velocity * 0.0668
-        //print("Amount to move: \(amountToMove)")
-        sprite.position += amountToMove
+        player.position = CGPoint(x: 500, y: 500)
+        let playerVelocity = CGPoint(x: cameraMovePointsPerSec, y: 0)
+        let amountToMove = playerVelocity * CGFloat(dt)
+        player.position += amountToMove
+        player.zPosition = 100
+        player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
     }
     
     func playerHit(enemy: SKSpriteNode) {
@@ -94,7 +108,7 @@ class GameScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
-        //28:00
+        //1:00:04
         
         backgroundColor = SKColor.black
         for i in 0...2{
