@@ -53,14 +53,15 @@ class GameScene: SKScene {
         else {
             dt = 0
         }
-        velocity.x = cameraMovePointsPerSec
+        /*velocity.x = cameraMovePointsPerSec
         move(sprite: player, velocity: velocity)
-
+*/
         player.texture?.filteringMode = SKTextureFilteringMode.nearest
         player.setScale(10)
         
         lastUpdateTime = currentTime
         moveCamera()
+        
         if lives <= 0 && !gameOver {
             gameOver = true
             print("You Lose")
@@ -80,9 +81,9 @@ class GameScene: SKScene {
     
     func move(sprite: SKSpriteNode, velocity: CGPoint) {
         player.position = CGPoint(x: 500, y: 500)
-        let playerVelocity = CGPoint(x: cameraMovePointsPerSec, y: 0)
-        let amountToMove = playerVelocity * CGFloat(dt)
-        player.position += amountToMove
+        player.position = CGPoint(x: cameraMovePointsPerSec, y: 0)
+        //let amountToMove = playerVelocity * CGFloat(dt)
+        
         player.zPosition = 100
         player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
