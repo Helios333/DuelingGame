@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F670C391E78973600EA77D6 /* background1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F670C381E78973600EA77D6 /* background1.png */; };
+		0F670C3B1E78973F00EA77D6 /* background2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0F670C3A1E78973F00EA77D6 /* background2.png */; };
 		D140CDFB1E6A1EBD006B2D60 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D140CDFA1E6A1EBD006B2D60 /* MainMenuScene.swift */; };
 		D168859E1E64DE1200C99F97 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D168859D1E64DE1200C99F97 /* AppDelegate.swift */; };
 		D16885A01E64DE1200C99F97 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = D168859F1E64DE1200C99F97 /* GameScene.sks */; };
@@ -40,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F670C381E78973600EA77D6 /* background1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background1.png; sourceTree = "<group>"; };
+		0F670C3A1E78973F00EA77D6 /* background2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background2.png; sourceTree = "<group>"; };
 		D140CDFA1E6A1EBD006B2D60 /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		D168859A1E64DE1200C99F97 /* DuelistGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DuelistGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D168859D1E64DE1200C99F97 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -119,6 +123,8 @@
 				D140CDFA1E6A1EBD006B2D60 /* MainMenuScene.swift */,
 				D16885A71E64DE1200C99F97 /* Main.storyboard */,
 				D16885AA1E64DE1200C99F97 /* Assets.xcassets */,
+				0F670C381E78973600EA77D6 /* background1.png */,
+				0F670C3A1E78973F00EA77D6 /* background2.png */,
 				D16885AC1E64DE1200C99F97 /* LaunchScreen.storyboard */,
 				D16885AF1E64DE1200C99F97 /* Info.plist */,
 			);
@@ -251,6 +257,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D16885A91E64DE1200C99F97 /* Main.storyboard in Resources */,
+				0F670C391E78973600EA77D6 /* background1.png in Resources */,
+				0F670C3B1E78973F00EA77D6 /* background2.png in Resources */,
 				D16885A01E64DE1200C99F97 /* GameScene.sks in Resources */,
 				D16885AB1E64DE1200C99F97 /* Assets.xcassets in Resources */,
 				D16885AE1E64DE1200C99F97 /* LaunchScreen.storyboard in Resources */,

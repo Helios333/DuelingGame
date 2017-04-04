@@ -148,7 +148,7 @@ class GameScene: SKScene {
         let amountToMove = backgroundVelocity * CGFloat(dt)
         cameraNode.position += amountToMove
         self.player.zPosition = 100
-        self.player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        self.player.anchorPoint = CGPoint(x: 5.0, y: 5.0) //changed this
         self.player.position = CGPoint(x: 400, y: 400)
 
         
@@ -179,13 +179,15 @@ class GameScene: SKScene {
         //2
         let background1 = SKSpriteNode(imageNamed: "background1")
         background1.anchorPoint = CGPoint.zero
-        background1.position = CGPoint(x: 0, y: 0)
+        background1.setScale(2.5)
+        background1.position = CGPoint(x: 0, y: 100)
         backgroundNode.addChild(background1)
         
         //3
         let background2 = SKSpriteNode(imageNamed: "background2")
         background2.anchorPoint = CGPoint.zero
-        background2.position = CGPoint(x: background1.size.width, y: 0)
+        background2.setScale(2.5)
+        background2.position = CGPoint(x: background1.size.width, y: 100)
         backgroundNode.addChild(background2)
         
         //4

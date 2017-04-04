@@ -11,7 +11,12 @@ import SpriteKit
 
 class MainMenuScene: SKScene {
     override func didMove(to view: SKView) {
+        
+        
+    
+        
         let mainMenuScene = SKSpriteNode(imageNamed: "MainMenu")
+          mainMenuScene.setScale(2.3)
         mainMenuScene.position = CGPoint(x: size.width/2, y: size.height/2)
         addChild(mainMenuScene)
     }
