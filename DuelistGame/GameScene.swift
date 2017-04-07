@@ -11,23 +11,25 @@ import GameplayKit
 
 class GameScene: SKScene {
     var lastUpdateTime: TimeInterval = 0
+    let zombieMovePointsPerSec: CGFloat = 1999 //tgj - 480.0
     var dt: TimeInterval = 0
     var invincible: Bool = false
     var player = SKSpriteNode(imageNamed: "PlayerSpriteBase")
     let playableRect: CGRect
     let playerAnimation: SKAction
-    let cameraMovePointsPerSec: CGFloat = 200.0
+    let cameraMovePointsPerSec: CGFloat = 1999.0
     let cameraNode = SKCameraNode()
     var lives = 5
     var gameOver = false
     var velocity = CGPoint.zero
-
+    
     
     override init (size: CGSize) {
         let maxAspectRatio:CGFloat = 16.0/9.0
         let playableHeight = size.width / maxAspectRatio
         let playableMargin = (size.height-playableHeight)/2.0
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)
+        
         var textures:[SKTexture] = []
         
         for i in 1...3 {
@@ -39,11 +41,12 @@ class GameScene: SKScene {
         
         playerAnimation = SKAction.animate(with: textures, timePerFrame: 0.3)
         
+        
         super.init(size: size)
     }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-}
+    }
     
     override func update(_ currentTime: TimeInterval) {
         
@@ -53,13 +56,21 @@ class GameScene: SKScene {
         else {
             dt = 0
         }
-        /*velocity.x = cameraMovePointsPerSec
-        move(sprite: player, velocity: velocity)
-*/
-        player.texture?.filteringMode = SKTextureFilteringMode.nearest
-        player.setScale(10)
-        
+        // tgj
         lastUpdateTime = currentTime
+        velocity.x = zombieMovePointsPerSec
+        move(sprite: player, velocity: velocity)
+        //boundsCheckZombie()
+        // tgj
+        
+        //player.texture?.filteringMode = SKTextureFilteringMode.nearest
+        //player.setScale(10)
+        //player.position = CGPoint(x: cameraMovePointsPerSec, y: 0)
+        //player.zPosition = 100
+        //player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        //tgj
+        
+        //lastUpdateTime = currentTime
         moveCamera()
         
         if lives <= 0 && !gameOver {
@@ -75,19 +86,15 @@ class GameScene: SKScene {
         }
         
     }
-
-
     
     
+    
+    //tgj
     func move(sprite: SKSpriteNode, velocity: CGPoint) {
-        player.position = CGPoint(x: 500, y: 500)
-        player.position = CGPoint(x: cameraMovePointsPerSec, y: 0)
-        //let amountToMove = playerVelocity * CGFloat(dt)
-        
-        player.zPosition = 100
-        player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        
-    }
+        let amountToMove = CGPoint(x: velocity.x * CGFloat(dt),
+                                   y: velocity.y * CGFloat(dt))
+        sprite.position += amountToMove
+    } //tgj
     
     func playerHit(enemy: SKSpriteNode) {
         invincible = true
@@ -109,20 +116,26 @@ class GameScene: SKScene {
     }
     
     override func didMove(to view: SKView) {
-        //1:00:04
+        //1:47:28
         
         backgroundColor = SKColor.black
         for i in 0...2{
             let background = backgroundNode()
-            background.anchorPoint = CGPoint(x: -1, y: -1)
-            //background.anchorPoint = CGPoint.zero
+            //tgj - background.anchorPoint = CGPoint(x: -1, y: -1)
+            background.anchorPoint = CGPoint.zero
             background.position = CGPoint(x: CGFloat(i)*background.size.width, y: 0)
             background.zPosition = -1
             background.name = "background"
             addChild(background)
         }
-        addChild(player)
-        
+        // tgj
+        player.texture?.filteringMode = SKTextureFilteringMode.nearest
+        player.setScale(10)
+        player.position = CGPoint(x: 1000, y: 500)
+        player.zPosition = 100
+        //player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        //tgj
+        self.addChild(player)
         
         
         
@@ -137,32 +150,42 @@ class GameScene: SKScene {
         enemy.position = CGPoint(x: cameraRect.minX + size.width + enemy.size.width/2, y: CGFloat.random(min: cameraRect.minY + enemy.size.height/2, max: cameraRect.maxY - enemy.size.height/2))
         enemy.zPosition = 50
         addChild(enemy)
-       /* let actionMove = SKAction.moveBy(x: -2000, y: 0, duration: 1.0)
-        let actionRemove = SKAction.removeFromParent()
-        enemy.run(SKAction.sequence([actionMove, actionRemove]))
-        */
+        /* let actionMove = SKAction.moveBy(x: -2000, y: 0, duration: 1.0)
+         let actionRemove = SKAction.removeFromParent()
+         enemy.run(SKAction.sequence([actionMove, actionRemove]))
+         */
     }
-
+    
     func moveCamera() {
         let backgroundVelocity = CGPoint(x: cameraMovePointsPerSec, y: 0)
         let amountToMove = backgroundVelocity * CGFloat(dt)
         cameraNode.position += amountToMove
-        self.player.zPosition = 100
-        self.player.anchorPoint = CGPoint(x: 5.0, y: 5.0) //changed this
-        self.player.position = CGPoint(x: 400, y: 400)
-
+        //tgj
+        //self.player.zPosition = 100
+        //self.player.anchorPoint = CGPoint(x: 0.0, y: 0.0) //changed this
+        //self.player.position = CGPoint(x: 400, y: 400)
+        //tgj
+        
         
         enumerateChildNodes(withName: "background") { node, _ in
             let background = node as! SKSpriteNode
             if background.position.x + background.size.width < self.cameraRect.origin.x {
-                background.position = CGPoint(x: background.position.x, y: background.position.y)
-                            }
+                
+                //tgj background.position = CGPoint(x: background.position.x, y: background.position.y)
+                
+                
+                background.position = CGPoint(
+                    x: background.position.x + background.size.width*2,
+                    y: background.position.y)
+                
+                //tgj
+            }
         }
     }
-
+    
     var cameraRect : CGRect {
-        let x = cameraNode.position.x - size.width/2 + (size.width - playableRect.width)
-        let y = cameraNode.position.y - size.height/2 + (size.height - playableRect.height)
+        let x = cameraNode.position.x - size.width/2 + (size.width - playableRect.width)/2 //tgj
+        let y = cameraNode.position.y - size.height/2 + (size.height - playableRect.height)/2 //tgj
         return CGRect(
             x: x,
             y: y,
@@ -180,14 +203,14 @@ class GameScene: SKScene {
         let background1 = SKSpriteNode(imageNamed: "background1")
         background1.anchorPoint = CGPoint.zero
         background1.setScale(2.5)
-        background1.position = CGPoint(x: 0, y: 100)
+        background1.position = CGPoint(x: 0, y: 0) // tgj 100)
         backgroundNode.addChild(background1)
         
         //3
         let background2 = SKSpriteNode(imageNamed: "background2")
         background2.anchorPoint = CGPoint.zero
         background2.setScale(2.5)
-        background2.position = CGPoint(x: background1.size.width, y: 100)
+        background2.position = CGPoint(x: background1.size.width, y: 0) // tgj 100)
         backgroundNode.addChild(background2)
         
         //4
@@ -196,7 +219,7 @@ class GameScene: SKScene {
             height: background1.size.height)
         return backgroundNode
     }
-
-
+    
+    
     
 }
