@@ -11,13 +11,15 @@ import GameplayKit
 
 class GameScene: SKScene {
     var lastUpdateTime: TimeInterval = 0
-    let zombieMovePointsPerSec: CGFloat = 1999 //tgj - 480.0
+    let zombieMovePointsPerSec: CGFloat = 200.0 //tgj - 480.0
     var dt: TimeInterval = 0
     var invincible: Bool = false
-    var player = SKSpriteNode(imageNamed: "PlayerSpriteBase")
+    var player = SKSpriteNode(imageNamed: "PlayerSpriteAnim1")
+    var player1 = SKSpriteNode(imageNamed: "PlayerSpriteAnim2")
+    var player2 = SKSpriteNode(imageNamed: "PlayerSpriteAnim3")
     let playableRect: CGRect
     let playerAnimation: SKAction
-    let cameraMovePointsPerSec: CGFloat = 1999.0
+    let cameraMovePointsPerSec: CGFloat = 200.0
     let cameraNode = SKCameraNode()
     var lives = 5
     var gameOver = false
@@ -33,10 +35,11 @@ class GameScene: SKScene {
         var textures:[SKTexture] = []
         
         for i in 1...3 {
-            textures.append(SKTexture(imageNamed: "PlayerSpriteBase\(i)"))
+            textures.append(SKTexture(imageNamed: "PlayerSpriteAnim\(i)"))
+            
         }
-        
-        textures.append(textures[2])
+        //Fix scaling
+        //textures.append(textures[2])
         textures.append(textures[1])
         
         playerAnimation = SKAction.animate(with: textures, timePerFrame: 0.3)
@@ -48,8 +51,14 @@ class GameScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func startPlayerAnimation(){
+        if player.action(forKey: "animation") == nil {
+            player.run(SKAction.repeatForever(playerAnimation), withKey: "animation")
+        }
+    }
+    
     override func update(_ currentTime: TimeInterval) {
-        
+        startPlayerAnimation()
         if lastUpdateTime > 0 {
             dt = currentTime - lastUpdateTime
         }
@@ -74,9 +83,9 @@ class GameScene: SKScene {
         moveCamera()
         
         if lives <= 0 && !gameOver {
+            
             gameOver = true
             print("You Lose")
-            //backgroundMusicPlayer.stop()
             let gameOverScene = GameOverScene(size: size, won: false)
             gameOverScene.scaleMode = scaleMode
             //2
@@ -87,14 +96,15 @@ class GameScene: SKScene {
         
     }
     
+    override func didEvaluateActions() {
+        checkCollisions()
+    }
     
-    
-    //tgj
     func move(sprite: SKSpriteNode, velocity: CGPoint) {
         let amountToMove = CGPoint(x: velocity.x * CGFloat(dt),
                                    y: velocity.y * CGFloat(dt))
         sprite.position += amountToMove
-    } //tgj
+    }
     
     func playerHit(enemy: SKSpriteNode) {
         invincible = true
@@ -110,13 +120,28 @@ class GameScene: SKScene {
             self?.invincible = false
         }
         player.run(SKAction.sequence([BlinkAction, setHidden]))
-        
-        //run(enemyCollisionSound)
+        print ("Player hit enemy")
         lives -= 1
     }
     
+    func checkCollisions() {
+        if (invincible == false){
+            var hitEnemies: [SKSpriteNode] = []
+            enumerateChildNodes(withName: "enemy") { node, _ in
+                let enemy = node as! SKSpriteNode
+                if node.frame.insetBy(dx: 20, dy: 20).intersects(self.player.frame) {
+                    hitEnemies.append(enemy)
+                }
+                
+            }
+            for enemy in hitEnemies {
+                //playerHit(enemy: enemy)
+            }
+        }
+
+    }
+    
     override func didMove(to view: SKView) {
-        //1:47:28
         
         backgroundColor = SKColor.black
         for i in 0...2{
@@ -130,11 +155,16 @@ class GameScene: SKScene {
         }
         // tgj
         player.texture?.filteringMode = SKTextureFilteringMode.nearest
+        player1.texture?.filteringMode = SKTextureFilteringMode.nearest
+        player2.texture?.filteringMode = SKTextureFilteringMode.nearest
         player.setScale(10)
-        player.position = CGPoint(x: 1000, y: 500)
+        player.position = CGPoint(x: 500, y: 500)
         player.zPosition = 100
-        //player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        //tgj
+        player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        run(SKAction.repeatForever(
+            SKAction.sequence([SKAction.run() { [weak self] in self?.spawnEnemy()
+                },
+                               SKAction.wait(forDuration: 4.0)])))
         self.addChild(player)
         
         
@@ -145,15 +175,18 @@ class GameScene: SKScene {
     }
     
     func spawnEnemy() {
-        let enemy = SKSpriteNode(imageNamed: "enemy")
+        let enemy = SKSpriteNode(imageNamed: "GoblinBase1")
         enemy.name = "enemy"
-        enemy.position = CGPoint(x: cameraRect.minX + size.width + enemy.size.width/2, y: CGFloat.random(min: cameraRect.minY + enemy.size.height/2, max: cameraRect.maxY - enemy.size.height/2))
+        enemy.texture?.filteringMode = SKTextureFilteringMode.nearest
+        enemy.setScale(6)
+        enemy.position = CGPoint(x: cameraRect.minX + size.width + enemy.size.width/2, y: 440)
+        enemy.anchorPoint = CGPoint(x: 0.25, y: 0.25)
         enemy.zPosition = 50
         addChild(enemy)
-        /* let actionMove = SKAction.moveBy(x: -2000, y: 0, duration: 1.0)
-         let actionRemove = SKAction.removeFromParent()
-         enemy.run(SKAction.sequence([actionMove, actionRemove]))
-         */
+        let actionMove = SKAction.moveBy(x: -2000, y: 0, duration: 4.0)
+        let actionRemove = SKAction.removeFromParent()
+        enemy.run(SKAction.sequence([actionMove, actionRemove]))
+        
     }
     
     func moveCamera() {
@@ -200,17 +233,17 @@ class GameScene: SKScene {
         backgroundNode.name = "background"
         
         //2
-        let background1 = SKSpriteNode(imageNamed: "background1")
+        let background1 = SKSpriteNode(imageNamed: "background1.1")
         background1.anchorPoint = CGPoint.zero
         background1.setScale(2.5)
-        background1.position = CGPoint(x: 0, y: 0) // tgj 100)
+        background1.position = CGPoint(x: 0, y: 0)
         backgroundNode.addChild(background1)
         
         //3
-        let background2 = SKSpriteNode(imageNamed: "background2")
+        let background2 = SKSpriteNode(imageNamed: "background2.1")
         background2.anchorPoint = CGPoint.zero
         background2.setScale(2.5)
-        background2.position = CGPoint(x: background1.size.width, y: 0) // tgj 100)
+        background2.position = CGPoint(x: background1.size.width, y: 0)
         backgroundNode.addChild(background2)
         
         //4
