@@ -14,11 +14,13 @@ class GameScene: SKScene {
     let zombieMovePointsPerSec: CGFloat = 200.0 //tgj - 480.0
     var dt: TimeInterval = 0
     var invincible: Bool = false
-    var player = SKSpriteNode(imageNamed: "PlayerSpriteAnim1")
-    var player1 = SKSpriteNode(imageNamed: "PlayerSpriteAnim2")
-    var player2 = SKSpriteNode(imageNamed: "PlayerSpriteAnim3")
+    var player = SKSpriteNode(imageNamed: "PlayerAnim1N")
+    var player1 = SKSpriteNode(imageNamed: "PlayerAnim2N")
+    var player2 = SKSpriteNode(imageNamed: "PlayerAnim3N")
+    var player3 = SKSpriteNode(imageNamed: "PlayerAnim4N")
     let playableRect: CGRect
     let playerAnimation: SKAction
+    let swordAnimation: SKAction
     let cameraMovePointsPerSec: CGFloat = 200.0
     let cameraNode = SKCameraNode()
     var lives = 5
@@ -34,17 +36,27 @@ class GameScene: SKScene {
         
         var textures:[SKTexture] = []
         
-        for i in 1...3 {
-            textures.append(SKTexture(imageNamed: "PlayerSpriteAnim\(i)"))
+        for i in 2...4 {
+            textures.append(SKTexture(imageNamed: "PlayerAnim\(i)N"))
             
         }
-        //Fix scaling
+
         //textures.append(textures[2])
         textures.append(textures[1])
         
         playerAnimation = SKAction.animate(with: textures, timePerFrame: 0.3)
         
+        var Stextures:[SKTexture] = []
         
+        for i in 2...4 {
+            Stextures.append(SKTexture(imageNamed: "PlayerAnim\(i)N"))
+            
+        }
+        
+        //textures.append(textures[2])
+        Stextures.append(textures[1])
+        
+        swordAnimation = SKAction.animate(with: Stextures, timePerFrame: 0.5)
         super.init(size: size)
     }
     required init(coder aDecoder: NSCoder) {
@@ -69,17 +81,7 @@ class GameScene: SKScene {
         lastUpdateTime = currentTime
         velocity.x = zombieMovePointsPerSec
         move(sprite: player, velocity: velocity)
-        //boundsCheckZombie()
-        // tgj
         
-        //player.texture?.filteringMode = SKTextureFilteringMode.nearest
-        //player.setScale(10)
-        //player.position = CGPoint(x: cameraMovePointsPerSec, y: 0)
-        //player.zPosition = 100
-        //player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        //tgj
-        
-        //lastUpdateTime = currentTime
         moveCamera()
         
         if lives <= 0 && !gameOver {
@@ -135,7 +137,7 @@ class GameScene: SKScene {
                 
             }
             for enemy in hitEnemies {
-                //playerHit(enemy: enemy)
+                playerHit(enemy: enemy)
             }
         }
 
@@ -157,6 +159,7 @@ class GameScene: SKScene {
         player.texture?.filteringMode = SKTextureFilteringMode.nearest
         player1.texture?.filteringMode = SKTextureFilteringMode.nearest
         player2.texture?.filteringMode = SKTextureFilteringMode.nearest
+        player3.texture?.filteringMode = SKTextureFilteringMode.nearest
         player.setScale(10)
         player.position = CGPoint(x: 500, y: 500)
         player.zPosition = 100
