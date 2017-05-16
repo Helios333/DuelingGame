@@ -18,9 +18,17 @@ class GameScene: SKScene {
     var player1 = SKSpriteNode(imageNamed: "PlayerAnim2N")
     var player2 = SKSpriteNode(imageNamed: "PlayerAnim3N")
     var player3 = SKSpriteNode(imageNamed: "PlayerAnim4N")
+    var sword = SKSpriteNode(imageNamed: "SwordAnim1")
+    var sword1 = SKSpriteNode(imageNamed: "SwordAnim2")
+    var sword2 = SKSpriteNode(imageNamed: "SwordAnim3")
+    var swordPosition = 1
+    
+    var swordDir = 1
+    
+    var clickCounter = 0
     let playableRect: CGRect
     let playerAnimation: SKAction
-    let swordAnimation: SKAction
+    //let swordAnimation: SKAction
     let cameraMovePointsPerSec: CGFloat = 200.0
     let cameraNode = SKCameraNode()
     var lives = 5
@@ -35,7 +43,7 @@ class GameScene: SKScene {
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)
         
         var textures:[SKTexture] = []
-        
+
         for i in 2...4 {
             textures.append(SKTexture(imageNamed: "PlayerAnim\(i)N"))
             
@@ -46,17 +54,18 @@ class GameScene: SKScene {
         
         playerAnimation = SKAction.animate(with: textures, timePerFrame: 0.3)
         
-        var Stextures:[SKTexture] = []
+        //var STextures:[SKTexture] = []
         
-        for i in 2...4 {
-            Stextures.append(SKTexture(imageNamed: "PlayerAnim\(i)N"))
+        /*for i in 1...3 {
+            STextures.append(SKTexture(imageNamed: "SwordAnim\(i)"))
             
         }
         
         //textures.append(textures[2])
-        Stextures.append(textures[1])
+        STextures.append(STextures[1])
         
-        swordAnimation = SKAction.animate(with: Stextures, timePerFrame: 0.5)
+        swordAnimation = SKAction.animate(with: STextures, timePerFrame: 0.5)*/
+        
         super.init(size: size)
     }
     required init(coder aDecoder: NSCoder) {
@@ -69,8 +78,16 @@ class GameScene: SKScene {
         }
     }
     
+   /* func startSwordAnimation(){
+        if sword.action(forKey: "animation") == nil {
+            sword.run(SKAction.repeatForever(swordAnimation), withKey: "animation")
+
+        }
+    }*/
+    
     override func update(_ currentTime: TimeInterval) {
         startPlayerAnimation()
+        //startSwordAnimation()
         if lastUpdateTime > 0 {
             dt = currentTime - lastUpdateTime
         }
@@ -81,7 +98,11 @@ class GameScene: SKScene {
         lastUpdateTime = currentTime
         velocity.x = zombieMovePointsPerSec
         move(sprite: player, velocity: velocity)
-        
+        move(sprite: sword, velocity: velocity)
+        move(sprite: sword1, velocity: velocity)
+        move(sprite: sword2, velocity: velocity)
+
+
         moveCamera()
         
         if lives <= 0 && !gameOver {
@@ -97,6 +118,14 @@ class GameScene: SKScene {
         }
         
     }
+    
+    /*override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else {
+            return
+        }
+        let touchLocation = touch.location(in: self)
+    }*/
+
     
     override func didEvaluateActions() {
         checkCollisions()
@@ -119,9 +148,15 @@ class GameScene: SKScene {
         }
         let setHidden = SKAction.run() { [weak self] in
             self?.player.isHidden = false
+            self?.sword.isHidden = false
+            self?.sword1.isHidden = false
+            self?.sword2.isHidden = false
             self?.invincible = false
         }
         player.run(SKAction.sequence([BlinkAction, setHidden]))
+        sword.run(SKAction.sequence([BlinkAction, setHidden]))
+        sword1.run(SKAction.sequence([BlinkAction, setHidden]))
+        sword2.run(SKAction.sequence([BlinkAction, setHidden]))
         print ("Player hit enemy")
         lives -= 1
     }
@@ -143,6 +178,79 @@ class GameScene: SKScene {
 
     }
     
+    func checkSwordCollisions() {
+        if (invincible == false){
+            var hitEnemies: [SKSpriteNode] = []
+            enumerateChildNodes(withName: "enemy") { node, _ in
+                let enemy = node as! SKSpriteNode
+                if node.frame.insetBy(dx: 20, dy: 20).intersects(self.sword.frame) {
+                    print ("Enemy hit Sword")
+                    enemy.removeFromParent()
+                }
+                else if node.frame.insetBy(dx: 20, dy: 20).intersects(self.sword1.frame) {
+                    print ("Enemy hit Sword")
+                    enemy.removeFromParent()
+                }
+                else if node.frame.insetBy(dx: 20, dy: 20).intersects(self.sword2.frame) {
+                    print ("Enemy hit Sword")
+                    enemy.removeFromParent()
+                }
+
+                
+            }
+            for enemy in hitEnemies {
+                playerHit(enemy: enemy)
+            }
+        }
+        
+    }
+
+    func sceneTapped() {
+        print ("Sword Movement =\(swordPosition)")
+
+        
+        /*if swordPosition == 1 {
+            swordPosition = 2
+        } else if swordPosition == 2 {
+            swordPosition = 3
+        } else {
+            swordPosition = 2
+        }*/
+        
+        
+        
+        
+            if swordPosition == 1 {
+                sword.alpha = 1
+                sword1.alpha = 0
+                sword2.alpha = 0
+                
+            }
+            else if swordPosition == 2 {
+                sword.alpha = 0
+                sword1.alpha = 1
+                sword2.alpha = 0
+            }
+            else if swordPosition == 3 {
+                sword.alpha = 0
+                sword1.alpha = 0
+                sword2.alpha = 1
+        }
+        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?) {
+        sceneTapped()
+        swordPosition += swordDir
+        
+        if ((swordPosition == 3 && swordDir > 0) ||
+            (swordPosition == 1 && swordDir < 0)) {
+            swordDir *= -1 // Reverse Dir
+        }
+        
+        //swordUD();
+    }
+    
     override func didMove(to view: SKView) {
         
         backgroundColor = SKColor.black
@@ -155,7 +263,23 @@ class GameScene: SKScene {
             background.name = "background"
             addChild(background)
         }
-        // tgj
+        
+        sword.texture?.filteringMode = SKTextureFilteringMode.nearest
+        sword1.texture?.filteringMode = SKTextureFilteringMode.nearest
+        sword2.texture?.filteringMode = SKTextureFilteringMode.nearest
+        sword.setScale(10)
+        sword1.setScale(10)
+        sword2.setScale(10)
+        sword.position = CGPoint(x: 515, y: 510)
+        sword.zPosition = 110
+        sword.anchorPoint = CGPoint(x: 0, y: 0)
+        sword1.position = CGPoint(x: 515, y: 510)
+        sword1.zPosition = 110
+        sword1.anchorPoint = CGPoint(x: 0, y: 0)
+        sword2.position = CGPoint(x: 525, y: 530)
+        sword2.zPosition = 110
+        sword2.anchorPoint = CGPoint(x: 0, y: 1)
+
         player.texture?.filteringMode = SKTextureFilteringMode.nearest
         player1.texture?.filteringMode = SKTextureFilteringMode.nearest
         player2.texture?.filteringMode = SKTextureFilteringMode.nearest
@@ -168,7 +292,14 @@ class GameScene: SKScene {
             SKAction.sequence([SKAction.run() { [weak self] in self?.spawnEnemy()
                 },
                                SKAction.wait(forDuration: 4.0)])))
+        self.addChild(sword)
+        self.addChild(sword1)
+        self.addChild(sword2)
         self.addChild(player)
+        sword.alpha = 0
+        sword1.alpha = 1
+        sword2.alpha = 0
+
         
         
         
@@ -181,8 +312,8 @@ class GameScene: SKScene {
         let enemy = SKSpriteNode(imageNamed: "GoblinBase1")
         enemy.name = "enemy"
         enemy.texture?.filteringMode = SKTextureFilteringMode.nearest
-        enemy.setScale(6)
-        enemy.position = CGPoint(x: cameraRect.minX + size.width + enemy.size.width/2, y: 440)
+        enemy.setScale(5)
+        enemy.position = CGPoint(x: cameraRect.minX + size.width + enemy.size.width/2, y: 420)
         enemy.anchorPoint = CGPoint(x: 0.25, y: 0.25)
         enemy.zPosition = 50
         addChild(enemy)
@@ -207,14 +338,10 @@ class GameScene: SKScene {
             let background = node as! SKSpriteNode
             if background.position.x + background.size.width < self.cameraRect.origin.x {
                 
-                //tgj background.position = CGPoint(x: background.position.x, y: background.position.y)
-                
-                
                 background.position = CGPoint(
                     x: background.position.x + background.size.width*2,
                     y: background.position.y)
                 
-                //tgj
             }
         }
     }
@@ -236,14 +363,14 @@ class GameScene: SKScene {
         backgroundNode.name = "background"
         
         //2
-        let background1 = SKSpriteNode(imageNamed: "background1.1")
+        let background1 = SKSpriteNode(imageNamed: "background1")
         background1.anchorPoint = CGPoint.zero
         background1.setScale(2.5)
         background1.position = CGPoint(x: 0, y: 0)
         backgroundNode.addChild(background1)
         
         //3
-        let background2 = SKSpriteNode(imageNamed: "background2.1")
+        let background2 = SKSpriteNode(imageNamed: "background2")
         background2.anchorPoint = CGPoint.zero
         background2.setScale(2.5)
         background2.position = CGPoint(x: background1.size.width, y: 0)

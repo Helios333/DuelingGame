@@ -25,9 +25,11 @@ class GameOverScene: SKScene{
         var background: SKSpriteNode
         if (won) {
             background = SKSpriteNode(imageNamed: "YouWin")
+             background.setScale(2.125)
             //run(SKAction.playSoundFileNamed("win.wav", waitForCompletion: false))
         } else {
             background = SKSpriteNode(imageNamed: "YouLose")
+            background.setScale(2.125)
             //run(SKAction.playSoundFileNamed("lose.wav", waitForCompletion: false))
         }
         
